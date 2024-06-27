@@ -1,0 +1,48 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Garlito API Documentation",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "Development API Server"
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "tags": [
+                    "Default"
+                ],
+                "summary": "Fetch Default Root Page.",
+                "operationId": "defaultRootPage",
+                "responses": {
+                    "200": {
+                        "description": "Response Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "name": "Garlito API",
+                                    "version": "1.0.1"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "description": "API token is required to access this API",
+                "in": "header",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
