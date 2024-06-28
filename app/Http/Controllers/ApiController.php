@@ -28,6 +28,8 @@ class ApiController extends BaseApiController
     {
         return $this->json_response([
             'name' => env('GARLITO_API_NAME') ?? 'Garlito API',
+            'api_url' => url('/api'),
+            'swagger_url' =>  url('/api/documentation'),
             'version' => env('GARLITO_API_VERSION') ?? '1.0.0'
         ]);
     }
