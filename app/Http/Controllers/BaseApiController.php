@@ -25,7 +25,7 @@ class BaseApiController extends Controller
     public string $option_label = '';
     public string $option_value = '';
     public string $db_table = '';
-    public $default_resource = null;
+    public  $default_resource = null;
     public $model = null;
 
     public function create_validation_rules(): array {

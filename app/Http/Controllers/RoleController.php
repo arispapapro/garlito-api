@@ -19,12 +19,10 @@ use Illuminate\Http\Request;
 use App\Models\Role;
 
 
-#[AllowDynamicProperties] class RoleController extends BaseApiController
+#[AllowDynamicProperties]
+class RoleController extends BaseApiController
 {
-
-
-
-
+    
     public function __construct()
     {
         //------------------------------------------------------------------------------------------------------------------
@@ -53,9 +51,5 @@ use App\Models\Role;
             ];
         };
     }
-
-
-
-
 
 }
