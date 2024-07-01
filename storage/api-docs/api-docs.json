@@ -33,6 +33,40 @@
                     }
                 }
             }
+        },
+        "/role/options": {
+            "get": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Fetch Roles as Options. [ Dropdown Menus ]",
+                "operationId": "roleOptions",
+                "responses": {
+                    "200": {
+                        "description": "Response Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "role_options",
+                                    "data": [
+                                        {
+                                            "label": "admin",
+                                            "value": 1
+                                        },
+                                        {
+                                            "label": "user",
+                                            "value": 2
+                                        }
+                                    ],
+                                    "status": 200,
+                                    "status_message": "success"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
