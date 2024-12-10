@@ -3,6 +3,12 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Symfony\Component\HttpFoundation\Response;
+use App\Helpers\GarlitoApiResponseHelper;
+use App\Http\Middleware\RoleWebMiddleware;
+
+// Middlewares
+ use App\Http\Middleware\RoleMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,8 +18,24 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            'role' => RoleMiddleware::class,
+            'role-web' => RoleWebMiddleware::class,
+        ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
+        $exceptions->respond(function (Response $response) {
+            if ($response->getStatusCode() === 401) {
+
+                return GarlitoApiResponseHelper::getUnauthorizedResponse();
+            }
+            if ($response->getStatusCode() === 403) {
+                return GarlitoApiResponseHelper::getForbiddenResponse();
+            }
+
+            if ($response->getStatusCode() === 404) {
+                return GarlitoApiResponseHelper::getNotFoundResponse('url');
+            }
+            return $response;
+        });    })->create();

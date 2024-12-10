@@ -12,7 +12,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            PassportClientSeeder::class,
+            LanguageSeeder::class,
             RoleSeeder::class,
+            UserSeeder::class
         ]);
     }
 }

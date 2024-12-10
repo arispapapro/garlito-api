@@ -11,13 +11,60 @@
         }
     ],
     "paths": {
-        "/": {
-            "get": {
+        "/register": {
+            "post": {
                 "tags": [
-                    "Default"
+                    "Authentication"
                 ],
-                "summary": "Fetch Default Root Page.",
-                "operationId": "defaultRootPage",
+                "summary": "Register a new User.",
+                "operationId": "Register",
+                "requestBody": {
+                    "description": "Login.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string"
+                                    },
+                                    "first_name": {
+                                        "type": "string"
+                                    },
+                                    "middle_name": {
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "type": "string"
+                                    },
+                                    "gender": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "username": "arispapapro@gmail.com",
+                                    "password": "123456",
+                                    "password_confirmation": "123456",
+                                    "first_name": "Aris",
+                                    "last_name": "Papaprodromou",
+                                    "middle_name": "Giorgos",
+                                    "gender": "male"
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Response Successful",
@@ -25,8 +72,53 @@
                             "application/json": {
                                 "schema": {},
                                 "example": {
-                                    "name": "Garlito API",
-                                    "version": "1.0.1"
+                                    "message": "registration_successful",
+                                    "data": {
+                                        "first_name": "",
+                                        "middle_name": "",
+                                        "last_name": "",
+                                        "full_name": " ",
+                                        "gender": "",
+                                        "email": "arispapapro@gmail.com",
+                                        "role": "garlito_user"
+                                    },
+                                    "status": 200,
+                                    "status_message": "success"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": {
+                                        "validation_errors": [
+                                            {
+                                                "input": "email",
+                                                "error": [
+                                                    "The email field is required."
+                                                ]
+                                            },
+                                            {
+                                                "input": "password",
+                                                "error": [
+                                                    "The password field is required."
+                                                ]
+                                            },
+                                            {
+                                                "input": "password_confirmation",
+                                                "error": [
+                                                    "The password confirmation field is required."
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "data": [],
+                                    "status": 400,
+                                    "status_message": "invalid_inputs"
                                 }
                             }
                         }
@@ -34,13 +126,35 @@
                 }
             }
         },
-        "/role/options": {
-            "get": {
+        "/login": {
+            "post": {
                 "tags": [
-                    "Role"
+                    "Authentication"
                 ],
-                "summary": "Fetch Roles as Options. [ Dropdown Menus ]",
-                "operationId": "roleOptions",
+                "summary": "Login.",
+                "operationId": "Login",
+                "requestBody": {
+                    "description": "Login.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "username": "arispapapro@gmail.com",
+                                    "password": "123456"
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Response Successful",
@@ -48,19 +162,331 @@
                             "application/json": {
                                 "schema": {},
                                 "example": {
-                                    "message": "role_options",
-                                    "data": [
-                                        {
-                                            "label": "admin",
-                                            "value": 1
+                                    "message": "logged_in",
+                                    "data": {
+                                        "user": {
+                                            "id": 2,
+                                            "full_name": "Anissa Collier",
+                                            "email": "user_2@iti.gr",
+                                            "username": "user_2",
+                                            "created_at": "2024-03-01T12:40:45.000000Z",
+                                            "updated_at": "2024-03-01T12:40:45.000000Z"
                                         },
-                                        {
-                                            "label": "user",
-                                            "value": 2
-                                        }
-                                    ],
+                                        "role": "operator",
+                                        "access_token": "1|3MgJLqlbYIT87TrqyAvB6FzaaCAJsPqtPdU4yQMz4a932f83"
+                                    },
                                     "status": 200,
                                     "status_message": "success"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "You are not authorized to access this endpoint.",
+                                    "status": 401,
+                                    "status_message": "unauthorized"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/change-password": {
+            "put": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Change User Password when you are authenticated.",
+                "operationId": "ChangePassword",
+                "requestBody": {
+                    "description": "Change Password Payload.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "password": "123456",
+                                    "password_confirmation": "123456"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Response Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "password_changed",
+                                    "data": [],
+                                    "status": 200,
+                                    "status_message": "success"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": {
+                                        "validation_errors": [
+                                            {
+                                                "input": "password",
+                                                "error": "The password field is required."
+                                            },
+                                            {
+                                                "input": "password_confirmation",
+                                                "error": "The password confirmation field is required."
+                                            }
+                                        ]
+                                    },
+                                    "data": [],
+                                    "status": 400,
+                                    "status_message": "invalid_inputs"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "You are not authorized to access this endpoint.",
+                                    "status": 401,
+                                    "status_message": "unauthorized"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/forgot-password": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "In Case User Forgot Password.",
+                "operationId": "ForgotPassword",
+                "requestBody": {
+                    "description": "Change Password Payload.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "email": "arispapapro@gmail.com"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Response Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "reset_link_sent",
+                                    "data": {
+                                        "status": true
+                                    },
+                                    "status": 200,
+                                    "status_message": "success"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": {
+                                        "validation_errors": [
+                                            {
+                                                "input": "email",
+                                                "error": [
+                                                    "The email field is required."
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "data": [],
+                                    "status": 400,
+                                    "status_message": "invalid_inputs"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Reset Password Throttle",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "reset_password_throttle",
+                                    "status_message": "error",
+                                    "status": 429
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "You are not authorized to access this endpoint.",
+                                    "status": 401,
+                                    "status_message": "unauthorized"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reset-password": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "When you want to reset your password.",
+                "operationId": "ResetPassword",
+                "requestBody": {
+                    "description": "Reset Password Payload.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "token": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "email": "arispapapro@gmail.com",
+                                    "password": "123456",
+                                    "token": "4LTQ3ZmEtYTkwNS1iN2VmOGE5NjllZmYiLCJqdGkiOiIzMTVlMWU4YzUwZjk3Zjc0NDMwMTcxM2J"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Response Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "password_reset_success",
+                                    "data": [],
+                                    "status": 200,
+                                    "status_message": "success"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Reset Password Throttle",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "reset_throttle",
+                                    "status_message": "error",
+                                    "status": 429
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": {
+                                        "validation_errors": [
+                                            {
+                                                "input": "email",
+                                                "error": [
+                                                    "The email field is required."
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "data": [],
+                                    "status": 400,
+                                    "status_message": "invalid_inputs"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "You are not authorized to access this endpoint.",
+                                    "status": 401,
+                                    "status_message": "unauthorized"
                                 }
                             }
                         }
@@ -71,12 +497,21 @@
     },
     "components": {
         "securitySchemes": {
-            "BearerAuth": {
+            "bearerAuth": {
                 "type": "http",
-                "description": "API token is required to access this API",
-                "in": "header",
+                "bearerFormat": "JWT",
                 "scheme": "bearer"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Account",
+            "description": "Account"
+        }
+    ]
 }

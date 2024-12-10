@@ -1,0 +1,454 @@
+body{
+
+    --garlito-primary-color: #1e2f97;
+    --garlito-primary-color-hover: #293ba6;
+
+    --garlito-secondary-color: #73b5b5;
+
+    /* Texts */
+    --general-text-size:16px;
+    --general-text-color:#333333;
+    --general-text-color-hover:#333333;
+
+    /* Sidebar */
+    --garlito-sidebar-width: 280px;
+    --garlito-sidebar-closed-width: 65px;
+    --garlito-sidebar-background:var(--garlito-primary-color);
+    --garlito-sidebar-button-color:  white;
+    --garlito-sidebar-icon-color: white;
+    --garlito-sidebar-icon-color-hover: #9fe1ff;
+    --garlito-sidebar-menu-item-color: white;
+    --garlito-sidebar-menu-item-color-hover: #9fe1ff;
+    --garlito-sidebar-category-color: var(--garlito-secondary-color);
+
+    /* Dashboard Cards */
+    --garlito-dashboard-card-background: var(--garlito-primary-color);
+    --garlito-dashboard-card-background-hover: var(--garlito-primary-color-hover);
+    --garlito-dashboard-card-icon-color: white;
+    --garlito-dashboard-card-counter-color: white;
+    --garlito-dashboard-card-label-color: white;
+
+    /* Tables */
+    --garlito-table-header-color: var(--garlito-primary-color);
+    --garlito-table-header-text-color: white;
+
+    /* Table Buttons */
+    --garlito-table-edit-button-color: #d3d3d3;
+    --garlito-table-edit-button-color-hover: #c5c5c5;
+    --garlito-table-delete-button-color: #eb928b;
+    --garlito-table-delete-button-color-hover: #d37d76;
+
+    --garlito-yes-button-color: #eb928b;
+    --garlito-yes-button-color-hover: #d37d76;
+
+    --garlito-no-button-color: #abc390;
+    --garlito-no-button-color-hover: #8ea673;
+
+}
+/* -------------------------------------------------------------------------------------------------------------------*/
+/* Bootstrap Resets  */
+/* -------------------------------------------------------------------------------------------------------------------*/
+a{ color:transparent; }
+
+.btn{
+    border-radius: 25px;
+    padding:5px 20px;
+}
+.btn-primary{
+    background: var(--garlito-primary-color);
+    border: 1px solid  var(--garlito-primary-color);
+}
+
+.btn-primary:hover{
+    background: var(--garlito-primary-color-hover);
+    border: 1px solid  var(--garlito-primary-color-hover);
+}
+
+/* Pagination */
+.active>.page-link, .page-link.active {
+    background-color: var(--garlito-primary-color);
+    border-color: var(--garlito-primary-color);
+}
+
+.page-link {
+    color: var(--garlito-primary-color);
+}
+
+ul.pagination{
+    margin:0;
+    padding:0;
+}
+.text-muted {
+    margin:0;
+    padding:0;
+}
+
+/* Modals */
+.modal{
+    background: rgba(0, 0, 0, 0.5);
+}
+.modal-title{
+    font-size: 16px !important;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------------------------------------------------*/
+
+/* -------------------------------------------------------------------------------------------------------------------*/
+/* Garlito Utilities   */
+/* -------------------------------------------------------------------------------------------------------------------*/
+
+/* Margins */
+.g-mb-5{ margin-bottom: 5px; }
+.g-mb-10{ margin-bottom: 10px; }
+.g-mb-15{ margin-bottom: 15px; }
+.g-mb-20{ margin-bottom: 20px; }
+.g-mb-25{ margin-bottom: 25px; }
+.g-mb-30{ margin-bottom: 30px; }
+.g-mb-35{ margin-bottom: 35px; }
+.g-mb-40{ margin-bottom: 40px; }
+
+
+.g-mr-5{ margin-right: 5px; }
+.g-mr-10{ margin-right: 10px; }
+.g-mr-15{ margin-right: 15px; }
+.g-mr-20{ margin-right: 20px; }
+.g-mr-25{ margin-right: 25px; }
+.g-mr-30{ margin-right: 30px; }
+.g-mr-35{ margin-right: 35px; }
+.g-mr-40{ margin-right: 40px; }
+
+/* -------------------------------------------------------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------------------------------------------------*/
+
+
+/* -------------------------------------------------------------------------------------------------------------------*/
+/* Garlito Components   */
+/* -------------------------------------------------------------------------------------------------------------------*/
+
+/* Dashboard Card */
+.garlito-dashboard-card{
+    width:100%;
+    height:100px;
+    background:var(--garlito-dashboard-card-background);
+    border-radius:25px;
+    padding:20px;
+    text-decoration: none!important;
+
+    .icon{
+        margin-right:5px;
+        svg{
+            width:32px;
+            height:32px;
+            fill: var(--garlito-dashboard-card-icon-color);
+        }
+    }
+    .counter{
+        font-size: 24px;
+        color: var(--garlito-dashboard-card-counter-color);
+    }
+
+    label{
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--garlito-dashboard-card-label-color);
+    }
+}
+
+.garlito-dashboard-card:hover{
+    background:var(--garlito-dashboard-card-background-hover);
+}
+
+/* Buttons */
+
+.garlito-table-button{
+    width:32px;
+    height:32px;
+    border-radius: 50%;
+    text-align: center;
+    border:0;
+    svg{
+        width: 16px;
+        fill:rgba(0,0,0,0.5)
+    }
+}
+
+.garlito-table-button.edit{
+    padding-top:6px;
+    background:var(--garlito-table-edit-button-color);
+}
+
+.garlito-table-button.edit:hover{
+    background:var(--garlito-table-edit-button-color-hover);
+}
+
+
+.garlito-table-button.delete{
+    background:var(--garlito-table-delete-button-color);
+}
+
+.garlito-table-button.delete:hover{
+    background:var(--garlito-table-delete-button-color-hover);
+}
+
+.btn.yes-button{
+    background:var(--garlito-yes-button-color);
+    border:0;
+}
+.btn.yes-button:hover{
+    background:var(--garlito-yes-button-color-hover);
+    border:0;
+}
+
+.btn.no-button{
+    background:var(--garlito-no-button-color);
+    border:0;
+}
+.btn.no-button:hover{
+    background:var(--garlito-no-button-color-hover);
+    border:0;
+}
+
+
+
+
+/* Table */
+
+.garlito-table-header{
+    tr{
+        th{
+            text-align: center;
+            font-size: var(--general-text-size);
+
+            padding: 15px;
+            background: var(--garlito-table-header-color);
+            color: var(--garlito-table-header-text-color);
+            font-weight: 400;
+        }
+    }
+}
+
+.garlito-table-body{
+    tr{
+        height: 60px;
+
+        th{
+            font-weight: 400;
+            text-align: center;
+            font-size: var(--general-text-size);
+            padding-top: 15px;
+        }
+    }
+}
+
+/* Page Header */
+.garlito-page-header{
+    h1{
+        font-size: 24px;
+    }
+    h5{
+        font-size: 16px;
+        font-weight: 400;
+    }
+}
+
+.garlito-card-header{
+    h1{
+        margin: 0;
+        font-size: 18px;
+    }
+}
+
+
+/* Form */
+.garlito-form{
+    margin: 0;
+    label{
+        font-weight:500;
+    }
+}
+
+/* -------------------------------------------------------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------------------------------------------------*/
+
+
+
+.garlito-auth-layout{
+    height: 100%;
+
+    .container-fluid{
+        height: 100%;
+
+        .row{
+            height:100%;
+
+            .garlito-auth-left{
+                background: var(--garlito-primary-color);
+                svg{
+                    width:100%;
+
+                }
+            }
+
+            .garlito-auth-right{
+
+                .auth-logo{
+                    width:180px;
+                }
+            }
+        }
+    }
+}
+
+
+.garlito-admin-layout{
+    height: 100vh;
+
+    header{
+
+        height: 80px;
+        background: white;
+        padding: 10px;
+
+        a{
+            .logo{
+                height: 48px;
+                cursor:pointer;
+            }
+        }
+
+        nav{
+            ul {
+                margin:0;
+                padding:0;
+                li{
+                    display: inline-block;
+                    margin-right:10px;
+                    color:var(--general-text-color);
+                    cursor:pointer;
+                }
+
+                li:hover{
+                    color:var(--garlito-primary-color);
+                }
+
+                #menuUserActionsButton{
+                    width: 36px;
+                    height: 36px;
+                    background: #e7e7e7;
+                    border-radius: 50%;
+                    text-align: center;
+                    padding-top: 5px;
+
+                    svg{
+                        width:24px;
+                        fill: #b2b2b2;
+                    }
+                }
+
+                form{
+                    padding: 0;
+                    margin: 0;
+                }
+            }
+        }
+
+    }
+
+    aside{
+        padding: 10px;
+        width:var(--garlito-sidebar-width);
+        height:calc(100vh - 80px);
+        position: absolute;
+        background:var(--garlito-sidebar-background);
+
+        #garlitoSidebarButtonClose{
+            width:32px;
+            height:32px;
+            cursor:pointer;
+
+            svg{
+                color:var(--garlito-sidebar-button-color);
+            }
+
+        }
+
+        #garlitoSidebarButtonOpen{
+            width:32px;
+            height:32px;
+            cursor:pointer;
+            display: none;
+
+            svg{
+                color:var(--garlito-sidebar-button-color);
+            }
+
+        }
+
+        ul {
+            margin:0;
+            padding: 10px;
+            list-style: none;
+
+
+            li.sidebar-category{
+                font-size: 14px;
+                font-weight: 500;
+                margin: 5px 0 ;
+                color: var(--garlito-sidebar-category-color);
+            }
+            a{
+                text-decoration: none;
+
+                li{
+                    width:100%;
+                    display: flex;
+                    align-items: center;
+                    color:var(--garlito-sidebar-menu-item-color);
+                    font-size: 16px;
+                    margin-bottom: 5px;
+
+                    svg{
+                        width: 24px;
+                        fill:var(--garlito-sidebar-icon-color);
+                    }
+
+                    span{
+                        padding: 5px 5px 5px 5px;
+
+                    }
+
+                }
+                li:hover{
+                    color:var(--garlito-sidebar-menu-item-color-hover);
+                    svg{
+                        width: 24px;
+                        fill:var(--garlito-sidebar-icon-color-hover);
+                    }
+                }
+
+
+
+            }
+        }
+    }
+
+    aside.closed{
+        width:var(--garlito-sidebar-closed-width);
+    }
+
+    main{
+        width: calc(100vw - var(--garlito-sidebar-width));
+        height: calc(100vh - 80px);
+        background: #f1f1f1;
+        overflow-y: auto;
+        position: absolute;
+        left: var(--garlito-sidebar-width);
+        padding:20px;
+    }
+
+    main.closed-sidebar{
+        width: calc(100vw - var(--garlito-sidebar-closed-width));
+        left: var(--garlito-sidebar-closed-width);
+    }
+}

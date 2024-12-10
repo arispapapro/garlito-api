@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 // Utilities
+use App\Helpers\GarlitoApiResponseHelper;
 use App\Helpers\GarlitoModelHelper;
 use App\Http\Resources\RoleResource;
 use App\Models\Role;
@@ -27,6 +28,7 @@ class BaseApiController extends Controller
     public string $db_table = '';
     public  $default_resource = null;
     public $model = null;
+    public $is_crud_controller = false;
 
     public function create_validation_rules(): array {
         return [
@@ -44,111 +46,15 @@ class BaseApiController extends Controller
     }
     //------------------------------------------------------------------------------------------------------------------
 
-    public function json_response( array $value = array() ): JsonResponse
-    {
-        return response()->json($value);
-    }
-
-    public function getErrorResponse( $message ): JsonResponse{
-
-        //Config Status
-        $status = 400;
-        $main_message = "bad_request";
-
-        //If User Doesnt insert any parameters.
-        if(!$message){
-            return response()->json([
-                'message' => $main_message ,
-                'status_message' => 'error',
-                'data' => [] ,
-                'status' => $status], 200);
-        }
-
-        if($message){
-            return response()->json(['message' => $message , 'status_message' => 'error', 'status' => $status], 200);
-        }
-
-        //Empty Response
-        return response()->json([]);
-    }
-
-    public function getUnauthorizedResponse(): JsonResponse{
-        //Config Status
-        $status = 401;
-        $main_message = "api_responses.email_password_wrong";
-
-        return response()->json(['message' => $main_message , 'status' => $status, 'status_message' => 'unauthorized' , 'data' => []], 200);
-    }
-
-    public function getNotFoundResponse(string $something): JsonResponse{
-        //Config Status
-        $status = 404;
-        $main_message = $something . "_not_found";
-
-        return response()->json(['message' => $main_message , 'status' => $status , 'data' => [] , 'status_message' => 'not_found'], 200);
-    }
-
-    public function getSuccessResponse( $message = null , $data = null ): JsonResponse {
-
-        //Config Status
-        $status = 200;
-        $main_message = "successful_request";
-        $status_message = "success";
-
-        //If User Doesnt insert any parameters.
-        if(!$message && !$data){
-            return response()->json(['message' => $main_message , 'data' => [] , 'status' => $status , 'status_message' => $status_message], 200);
-        }
-
-        if($message && $data){
-            return response()->json(['message' => $message , 'data' => $data , 'status' => $status, 'status_message' => $status_message], 200);
-        }
-
-        if(!$message && $data){
-            return response()->json(['message' => $main_message , 'data' => $data , 'status' => $status, 'status_message' => $status_message], 200);
-        }
-
-        if($message && !$data) {
-            return response()->json(['message' => $message, 'data' => [], 'status' => $status, 'status_message' => $status_message], 200);
-        }
-
-        //Empty Response
-        return response()->json([]);
-    }
-
-    public function getInvalidInputsResponse($errors = [] , ): JsonResponse{
-        $status = 400;
-        $validation_errors = [];
-        foreach(collect($errors) as $key => $value ){
-            array_push($validation_errors , [ 'input' => $key , 'error' => $value ]);
-        }
-        return response()->json(['message' => [ 'validation_errors' => $validation_errors] , 'data' => [] , 'status' => $status ,  'status_message' => 'invalid_inputs'], 200);
-
-    }
-
-    public function getNotPermittedToDoActionResponse($action): JsonResponse{
-        $status = 403;
-        return response()->json(['message' => 'You are not permitted to ' . $action , 'data' => [] , 'status' => $status ,  'status_message' => 'not_permitted_action'], 200);
-    }
-
-    public function getInvalidParametersResponse($errors = []): JsonResponse{
-        $status = 400;
-        $validation_errors = [];
-        foreach(collect($errors) as $key => $value ){
-            array_push($validation_errors , [ 'input' => $key , 'error' => $value ]);
-        }
-        return response()->json(['message' => [ 'validation_errors' => $validation_errors] , 'data' => [] , 'status' => $status ,  'status_message' => 'invalid_parameters'], 200);
-
-    }
-
-
-
     //------------------------------------------------------------------------------------------------------------------
     // Default CRUD Functions
     //------------------------------------------------------------------------------------------------------------------
 
 
     public function model_options(): JsonResponse {
+
+        // If it's not a crud controller
+        if(!$this->is_crud_controller){ return GarlitoApiResponseHelper::getErrorResponse('not_crud_controller');}
 
         // Init Models Data
         $models = [];
@@ -164,10 +70,13 @@ class BaseApiController extends Controller
         $options = GarlitoModelHelper::get_model_options($models, $this->option_label , $this->option_value);
 
         // Return Success Response
-        return $this->getSuccessResponse($this->model_single_name . '_options', $options);
+        return GarlitoApiResponseHelper::getSuccessResponse($this->model_single_name . '_options', $options);
     }
 
     public function create_model(Request $request): JsonResponse {
+
+        // If it's not a crud controller
+        if(!$this->is_crud_controller){ return GarlitoApiResponseHelper::getErrorResponse('not_crud_controller');}
 
         // Get all input values from request
         $input = $request->all();
@@ -176,22 +85,25 @@ class BaseApiController extends Controller
         $validator = Validator::make($input, $this->create_validation_rules());
 
         // If its not validated return response with error messages.
-        if($validator->fails()){return $this->getInvalidInputsResponse($validator->errors());}
+        if($validator->fails()){return GarlitoApiResponseHelper::getInvalidInputsResponse($validator->errors());}
 
         // Create New Model
         $new_model = $this->model::create($request->all());
 
         // Return Success Response
-        return $this->getSuccessResponse('single_' . $this->model_single_name .'_created' , $this->default_resource::make($new_model));
+        return GarlitoApiResponseHelper::getSuccessResponse('single_' . $this->model_single_name .'_created' , $this->default_resource::make($new_model));
     }
 
     public function update_model(Request $request, int $id): JsonResponse {
+
+        // If it's not a crud controller
+        if(!$this->is_crud_controller){ return GarlitoApiResponseHelper::getErrorResponse('not_crud_controller');}
 
         // Search Single Model.
         $search_model = $this->model::find($id);
 
         // Return Not Found Response
-        if(!$search_model){ return $this->getNotFoundResponse($this->model_single_name);}
+        if(!$search_model){ return GarlitoApiResponseHelper::getNotFoundResponse($this->model_single_name);}
 
         // Get all input values from request
         $input = $request->all();
@@ -200,7 +112,7 @@ class BaseApiController extends Controller
         $validator = Validator::make($input, $this->update_validation_rules($search_model));
 
         // If its not validated return response with error messages.
-        if($validator->fails()){return $this->getInvalidInputsResponse($validator->errors());}
+        if($validator->fails()){return GarlitoApiResponseHelper::getInvalidInputsResponse($validator->errors());}
 
         // Update Every Value of the model.
         foreach($request->all() as $key => $value ){
@@ -214,46 +126,55 @@ class BaseApiController extends Controller
         $search_model = $this->model::find($id);
 
         // Return Success Response
-        return $this->getSuccessResponse('single_' . $this->model_single_name. '_updated' , $this->default_resource::make($search_model));
+        return GarlitoApiResponseHelper::getSuccessResponse('single_' . $this->model_single_name. '_updated' , $this->default_resource::make($search_model));
 
 
     }
     public function delete_model(int $id): JsonResponse {
 
+        // If it's not a crud controller
+        if(!$this->is_crud_controller){ return GarlitoApiResponseHelper::getErrorResponse('not_crud_controller');}
+
         // Search Single Model.
         $search_model = $this->model::find($id);
 
         // Return Not Found Response
-        if(!$search_model){ return $this->getNotFoundResponse($this->model_single_name);}
+        if(!$search_model){ return GarlitoApiResponseHelper::getNotFoundResponse($this->model_single_name);}
 
         // Delete Model
         $search_model->delete();
 
         // Return Success Response
-        return $this->getSuccessResponse( $this->model_single_name . '_deleted', []);
+        return GarlitoApiResponseHelper::getSuccessResponse( $this->model_single_name . '_deleted', []);
 
     }
 
     public function single_model(int $id): JsonResponse {
 
+        // If it's not a crud controller
+        if(!$this->is_crud_controller){ return GarlitoApiResponseHelper::getErrorResponse('not_crud_controller');}
+
         // Search Single Model.
         $search_model = $this->model::find($id);
 
         // Return Not Found Response
-        if(!$search_model){ return $this->getNotFoundResponse($this->model_single_name);}
+        if(!$search_model){ return GarlitoApiResponseHelper::getNotFoundResponse($this->model_single_name);}
 
         // Return Success Response
-        return $this->getSuccessResponse('single_' . $this->model_single_name , $this->default_resource::make($search_model));
+        return GarlitoApiResponseHelper::getSuccessResponse('single_' . $this->model_single_name , $this->default_resource::make($search_model));
 
     }
 
     public function all_models(): JsonResponse {
 
+        // If it's not a crud controller
+        if(!$this->is_crud_controller){ return GarlitoApiResponseHelper::getErrorResponse('not_crud_controller');}
+
         // Search Single Model.
         $all_models = DB::table($this->db_table)->get();
 
         // Return Success Response
-        return $this->getSuccessResponse('single_' . $this->model_single_name , $this->default_resource::collection($all_models));
+        return GarlitoApiResponseHelper::getSuccessResponse('single_' . $this->model_single_name , $this->default_resource::collection($all_models));
     }
 
 }

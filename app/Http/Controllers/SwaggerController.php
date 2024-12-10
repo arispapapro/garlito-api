@@ -14,12 +14,11 @@ use OpenApi\Annotations as OA;
  *       url= L5_SWAGGER_CONST_HOST,
  *       description="Development API Server"
  *  )
- *  @OA\SecurityScheme(
+ * @OA\SecurityScheme(
+ *     securityScheme="bearerAuth",
  *      type="http",
- *      description="API token is required to access this API",
- *      in="header",
  *      scheme="bearer",
- *      securityScheme="BearerAuth",
+ *      bearerFormat="JWT"
  *  )
  */
 class SwaggerController extends Controller

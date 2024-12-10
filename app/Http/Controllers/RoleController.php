@@ -22,20 +22,38 @@ use App\Models\Role;
 #[AllowDynamicProperties]
 class RoleController extends BaseApiController
 {
-    
+
     public function __construct()
     {
         //------------------------------------------------------------------------------------------------------------------
         // Controller Configuration
         //------------------------------------------------------------------------------------------------------------------
 
+        // Set CRUD Controller Functionality On.
+        $this->is_crud_controller = true;
+
+        // Single Model Name : E.g Apple
         $this->model_single_name =  'role';
+
+        // Plural Model Name : E.g Apples
         $this->model_plural_name =  'roles';
+
+        // The Label to Select in Dropdown Lists
         $this->option_label =  'slug';
+
+        // The Value to Select in Dropdown Lists
         $this->option_value =  'id';
+
+        // Table Name in the Database
         $this->db_table =  'roles';
+
+        // The Basic Resource To Be Used For This Model.
         $this->default_resource =  RoleResource::class;
+
+        // The Model Itself
         $this->model = Role::class;
+
+        // Validations when you create a new model instance.
         $this->create_validation_rules = function(): array {
             return [
                 'label' => ['string', 'required'],
@@ -43,6 +61,8 @@ class RoleController extends BaseApiController
                 'slug' => ['required', Rule::unique($this->db_table)]
             ];
         };
+
+        // Validations when you update a new model instance.
         $this->update_validation_rules = function ($model = null ): array {
             return [
                 'label' => ['string'],

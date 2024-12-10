@@ -1,0 +1,71 @@
+# deploy/docker-compose.yml
+
+version: '3.8'
+
+services:
+    garlito_api:
+        restart: unless-stopped
+        container_name: garlito_api
+        build:
+            context: ../..
+            dockerfile: ./deploy/Dockerfile
+        # allocate as many volumes as necessary, if needed.
+        volumes:
+            - ../storage/app:/var/www/html/storage/app
+        environment:
+            GARLITO_API_NAME: ${GARLITO_API_NAME}
+            GARLITO_API_VERSION: ${GARLITO_API_VERSION}
+            GARLITO_FORGET_PASSWORD_TYPE: ${GARLITO_FORGET_PASSWORD_TYPE}
+            GARLITO_FORGET_PASSWORD_EXTERNAL_URL: ${GARLITO_FORGET_PASSWORD_EXTERNAL_URL}
+            GARLITO_ACTIVATE_ACCOUNT_REDIRECT_URI: ${GARLITO_ACTIVATE_ACCOUNT_REDIRECT_URI}
+            PASSPORT_PASSWORD_GRANT_CLIENT_ID_PASSWORD: ${PASSPORT_PASSWORD_GRANT_CLIENT_ID_PASSWORD}
+            PASSPORT_PASSWORD_GRANT_CLIENT_SECRET_PASSWORD: ${PASSPORT_PASSWORD_GRANT_CLIENT_SECRET_PASSWORD}
+            PASSPORT_PERSONAL_ACCESS_CLIENT_ID_PASSWORD: ${PASSPORT_PERSONAL_ACCESS_CLIENT_ID_PASSWORD}
+            PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET_PASSWORD: ${PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET_PASSWORD}
+            L5_SWAGGER_GENERATE_ALWAYS: ${L5_SWAGGER_GENERATE_ALWAYS}
+            L5_SWAGGER_CONST_HOST: ${L5_SWAGGER_CONST_HOST}
+            L5_SWAGGER_TITLE: ${L5_SWAGGER_TITLE}
+            APP_NAME: ${APP_NAME}
+            APP_ENV: ${APP_ENV}
+            APP_DEBUG: ${APP_DEBUG}
+            APP_KEY: ${APP_KEY}
+            APP_VERSION: ${APP_VERSION}
+            APP_URL: ${APP_URL}
+            DB_CONNECTION: mysql
+            DB_HOST: database
+            DB_PORT: 3306
+            DB_DATABASE: ${DB_DATABASE}
+            DB_USERNAME: ${DB_USERNAME}
+            DB_PASSWORD: ${DB_PASSWORD}
+            MAIL_MAILER: ${MAIL_MAILER}
+            MAIL_HOST: ${MAIL_HOST}
+            MAIL_PORT: ${MAIL_PORT}
+            MAIL_USERNAME: ${MAIL_USERNAME}
+            MAIL_PASSWORD: ${MAIL_PASSWORD}
+            MAIL_ENCRYPTION: ${MAIL_ENCRYPTION}
+            MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS}
+            MAIL_FROM_NAME: ${MAIL_FROM_NAME}
+        ports:
+            - "1821:80"
+        networks:
+            - garlito-api-network
+        depends_on:
+            - garlito_mysql
+
+    garlito_mysql:
+        restart: unless-stopped
+        image: mariadb:lts-jammy
+        volumes:
+            - garlito-mysql-volume:/var/lib/mysql
+        environment:
+            MARIADB_DATABASE: ${DB_DATABASE}
+            MARIADB_USER: ${DB_USERNAME}
+            MARIADB_PASSWORD: ${DB_PASSWORD}
+            MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+        networks:
+            - garlito-api-network
+volumes:
+    garlito-mysql-volume:
+networks:
+    garlito-api-network:
+        driver: bridge
